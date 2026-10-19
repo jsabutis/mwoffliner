@@ -1,0 +1,253 @@
+/* PoC chrome. The tile and layout rules below the line mirror
+   res/mobile_main_page.css in mwoffliner, so they can be ported. */
+:root {
+  --ink: #111;
+  --muted: #3a3a3a;
+  --paper: #f5f5f4;
+  --line: #555;
+  color-scheme: light;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 15px/1.45 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+body.bare {
+  background: #000;
+}
+header {
+  padding: 16px;
+  max-width: 1280px;
+}
+h1 {
+  font-size: 1.25rem;
+  margin: 0 0 4px;
+}
+header p {
+  margin: 0 0 12px;
+  color: var(--muted);
+  max-width: 70ch;
+}
+a {
+  color: #0b3d91;
+}
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  align-items: center;
+}
+fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+}
+legend {
+  float: left;
+  margin-right: 8px;
+  font-weight: 600;
+}
+.seg input[type='radio'] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.seg label {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 4px 10px;
+  cursor: pointer;
+  background: #fff;
+}
+.seg input:checked + label {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #fff;
+}
+.seg input:focus-visible + label,
+select:focus-visible,
+input[type='range']:focus-visible,
+input[type='checkbox']:focus-visible {
+  outline: 3px solid #0b3d91;
+  outline-offset: 2px;
+}
+select {
+  font: inherit;
+  padding: 3px 6px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--ink);
+}
+input[type='range'] {
+  width: 160px;
+}
+.check {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+#metrics {
+  margin: 12px 0 0;
+  font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: var(--ink);
+}
+#metrics b.bad {
+  background: #ffd9d6;
+  color: #5c0700;
+  padding: 0 4px;
+}
+.stage {
+  overflow-x: auto;
+  padding: 0 0 16px;
+}
+
+/* ------------------------------------------------------------------
+   Welcome page tiles. Same markup as makePageImageTile, plus the ratio:
+   <a class="item" data-ratio="1.3333" style="--r:1.3333">
+     <figure><img width height><figcaption>Title</figcaption></figure></a>
+   ------------------------------------------------------------------ */
+.frame {
+  container-type: inline-size;
+  background: #000; /* #content is black today: any gap shows as a black box */
+  margin: 0 auto;
+  --rmin: 0.3333;
+  --rmax: 3;
+  --cols: 2;
+}
+/* Column counts from mobile_main_page.css, as container queries so the
+   width control works without resizing the window. */
+@container (min-width: 768px) {
+  #content { --cols: 3; }
+}
+@container (min-width: 1024px) {
+  #content { --cols: 4; }
+}
+@container (min-width: 2024px) {
+  #content { --cols: 8; }
+}
+@container (min-width: 4048px) {
+  #content { --cols: 16; }
+}
+#content {
+  position: relative;
+  overflow: hidden;
+  font-size: 1rem;
+}
+.item {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  text-decoration: none;
+}
+.item figure {
+  margin: 0;
+  height: 100%;
+}
+.item img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #fff;
+  transition: transform 0.3s;
+}
+@media (hover: hover) {
+  .item:hover img {
+    transform: scale(1.1);
+  }
+}
+/* Always visible, 2 lines max. White on 75% black is 10:1 or better
+   even over a white image. */
+.item figcaption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 0.35em 0.5em;
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.875em;
+  line-height: 1.25;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+/* Tile without an image: tinted, title centred and larger. */
+.item.noimg figure {
+  aspect-ratio: 4 / 3;
+  background: #1f3347;
+}
+.item.noimg figcaption {
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: none;
+  font-size: 1.05em;
+  padding: 0.75em;
+}
+
+/* Current JS layout: Masonry positions the tiles, columns as today. */
+.layout-masonry .item {
+  width: calc(100% / var(--cols));
+}
+
+/* Current no-JS layout: CSS columns, as .nojs #content today. */
+.layout-columns {
+  column-count: var(--cols);
+  column-gap: 0;
+}
+.layout-columns .item {
+  display: inline-block;
+  width: 100%;
+  vertical-align: top;
+}
+
+/* Proposed: balanced justified rows. justified.js sets every tile box;
+   the image fills it and crops only when its ratio was clamped. */
+.layout-justified .item {
+  position: absolute;
+}
+.layout-justified .item img,
+.layout-flex .item img {
+  height: 100%;
+  object-fit: cover;
+}
+.layout-justified .item.noimg figure {
+  aspect-ratio: auto;
+}
+
+/* Proposed no-JS fallback: flex rows, each tile grows by its ratio so a
+   row shares one height. The last row stays at natural height, left
+   aligned, instead of being stretched and cropped. */
+.layout-flex {
+  display: flex;
+  flex-wrap: wrap;
+  --row-h: calc(75cqw / var(--cols)); /* same tile size as the columns */
+}
+.layout-flex::after {
+  content: '';
+  flex: 1000000 1 0px;
+}
+.layout-flex .item {
+  --rc: clamp(var(--rmin), var(--r), var(--rmax));
+  flex: var(--rc) 1 calc(var(--rc) * var(--row-h));
+  aspect-ratio: var(--rc);
+}
+.layout-flex .item.noimg figure {
+  aspect-ratio: auto;
+}

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="300" viewBox="0 0 600 300">
+<rect width="600" height="300" fill="#81c6e4"/>
+<rect x="6" y="6" width="588" height="288" fill="none" stroke="#176282" stroke-width="12" stroke-dasharray="36 24"/>
+<path d="M54 0H0V54M546 0H600V54M54 300H0V246M546 300H600V246" fill="none" stroke="#176282" stroke-width="36"/>
+<g font-family="Helvetica, Arial, sans-serif" font-weight="700" fill="#111" text-anchor="middle">
+<text x="300" y="140.4" font-size="90">26</text>
+<text x="300" y="202.8" font-size="48">2:1</text>
+</g>
+</svg>

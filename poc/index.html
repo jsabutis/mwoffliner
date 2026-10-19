@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Welcome Page Layouts</title>
+<link rel="stylesheet" href="poc.css">
+<script defer src="vendor/masonry.min.js"></script>
+<script defer src="layouts/current.js"></script>
+<script defer src="layouts/justified.js"></script>
+<script defer src="layouts/flex.js"></script>
+<script defer src="poc.js"></script>
+</head>
+<body>
+<header>
+  <h1>mwoffliner welcome page layouts</h1>
+  <p>100 test tiles for <a href="https://github.com/openzim/mwoffliner/issues/2694">issue #2694</a>, ratios from 1:5 to 5:1. Each image shows its number, its ratio and a dashed frame, so any crop is visible. Black is the page background: black area is uncovered. <a href="nojs.html">No-JS page</a>, <a href="images.json">images.json</a>, <a href="README.md">README</a>.</p>
+  <div class="controls">
+    <fieldset class="seg" id="layouts"><legend>Layout</legend></fieldset>
+    <fieldset class="seg">
+      <legend>Width</legend>
+      <input type="radio" name="width" id="w-320" value="320"><label for="w-320">320</label>
+      <input type="radio" name="width" id="w-360" value="360"><label for="w-360">360</label>
+      <input type="radio" name="width" id="w-800" value="800"><label for="w-800">800</label>
+      <input type="radio" name="width" id="w-1280" value="1280"><label for="w-1280">1280</label>
+      <input type="radio" name="width" id="w-1920" value="1920"><label for="w-1920">1920</label>
+      <input type="radio" name="width" id="w-fill" value="fill"><label for="w-fill">Fill window</label>
+      <input type="range" id="width-range" min="280" max="2560" step="10" aria-label="Width in pixels">
+      <span id="width-value"></span>
+    </fieldset>
+    <label class="check">Ratio clamp
+      <select id="clamp">
+        <option value="2">1:2 to 2:1</option>
+        <option value="3">1:3 to 3:1</option>
+        <option value="5">1:5 to 5:1</option>
+        <option value="off">off</option>
+      </select>
+    </label>
+    <label class="check"><input type="checkbox" id="missing"> Every 9th image missing</label>
+  </div>
+  <p id="metrics" aria-live="polite"></p>
+</header>
+<div class="stage"><div class="frame"><div id="content"></div></div></div>
+</body>
+</html>
