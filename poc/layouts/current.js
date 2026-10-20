@@ -8,6 +8,7 @@
   window.PocLayouts.push({
     id: 'masonry',
     label: 'Masonry (today, JS)',
+    css: 'layout-masonry',
     js: true,
     apply: function (container) {
       // Same call as page_list_home.js; transitions off so moves are instant.
@@ -21,6 +22,7 @@
   window.PocLayouts.push({
     id: 'columns',
     label: 'CSS columns (today, no JS)',
+    css: 'layout-columns',
     js: false,
   })
 })()

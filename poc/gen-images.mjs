@@ -1,7 +1,7 @@
 // Generates the 100 test images, images.json and the static nojs.html.
 // Deterministic: running it again produces byte-identical files.
 // Usage: node gen-images.mjs
-import { mkdirSync, writeFileSync } from 'node:fs'
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -145,16 +145,23 @@ const manifest = shapes.map((s, i) => {
 })
 writeFileSync(join(here, 'images.json'), JSON.stringify(manifest, null, 2) + '\n')
 
-// Static page with no script at all: proves the CSS fallback on its own.
+// The tiles, as makePageImageTile writes them plus data-ratio. They go
+// into index.html (so the page needs no script to show the flex rows)
+// and into nojs.html, a bare page with no controls at all.
 const esc = (t) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;')
 const tiles = manifest
-  .map(
-    (m) =>
-      `<a class="item" href="#" style="--r:${(m.width / m.height).toFixed(4)}"><figure>` +
+  .map((m, i) => {
+    const r = (m.width / m.height).toFixed(4)
+    return (
+      `<a class="item" href="#tile-${i + 1}" data-ratio="${r}" style="--r:${r}"><figure>` +
       `<img loading="lazy" src="${m.file}" width="${m.width}" height="${m.height}" alt="">` +
-      `<figcaption>${esc(m.title)}</figcaption></figure></a>`,
-  )
+      `<figcaption>${esc(m.title)}</figcaption></figure></a>`
+    )
+  })
   .join('\n')
+const indexPath = join(here, 'index.html')
+const index = readFileSync(indexPath, 'utf8')
+writeFileSync(indexPath, index.replace(/<!-- tiles -->[\s\S]*<!-- \/tiles -->/, `<!-- tiles -->\n${tiles}\n<!-- /tiles -->`))
 writeFileSync(
   join(here, 'nojs.html'),
   `<!doctype html>
@@ -166,11 +173,11 @@ writeFileSync(
 <link rel="stylesheet" href="poc.css">
 </head>
 <body class="bare">
-<div class="frame"><div id="content" class="layout-flex">
+<div class="frame"><div id="content" class="layout-rows" data-title="scrim">
 ${tiles}
 </div></div>
 </body>
 </html>
 `,
 )
-console.log(`wrote ${manifest.length} images, images.json, nojs.html`)
+console.log(`wrote ${manifest.length} images, images.json, index.html tiles, nojs.html`)

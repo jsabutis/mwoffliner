@@ -109,19 +109,31 @@ input[type='range'] {
   overflow-x: auto;
   padding: 0 0 16px;
 }
+noscript p {
+  margin: 0;
+  padding: 8px 12px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--ink);
+}
 
 /* ------------------------------------------------------------------
    Welcome page tiles. Same markup as makePageImageTile, plus the ratio:
    <a class="item" data-ratio="1.3333" style="--r:1.3333">
      <figure><img width height><figcaption>Title</figcaption></figure></a>
+   One markup for every layout and every title style. With no script the
+   proposed layout is plain CSS flex rows; justified.js only adds sizes.
    ------------------------------------------------------------------ */
 .frame {
   container-type: inline-size;
   background: #000; /* #content is black today: any gap shows as a black box */
   margin: 0 auto;
-  --rmin: 0.3333;
-  --rmax: 3;
+  --rmin: 0.5;
+  --rmax: 2;
   --cols: 2;
+  --gap: 0px;
+  --radius: 0px;
 }
 /* Column counts from mobile_main_page.css, as container queries so the
    width control works without resizing the window. */
@@ -146,11 +158,14 @@ input[type='range'] {
   display: block;
   position: relative;
   overflow: hidden;
+  min-width: 0;
   color: #fff;
   text-decoration: none;
+  border-radius: var(--radius);
 }
 .item figure {
   margin: 0;
+  position: relative;
   height: 100%;
 }
 .item img {
@@ -165,15 +180,17 @@ input[type='range'] {
     transform: scale(1.1);
   }
 }
-/* Always visible, 2 lines max. White on 75% black is 10:1 or better
-   even over a white image. */
+@media (prefers-reduced-motion: reduce) {
+  .item img {
+    transition: none;
+  }
+}
+/* Title, 2 lines max, always visible. The bottom spacing is a transparent
+   border, not padding: overflow clips at the padding edge, so a padding
+   would let the top of a third line peek through under the clamp. */
 .item figcaption {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 0.35em 0.5em;
-  background: rgba(0, 0, 0, 0.75);
+  padding: 0.45em 0.6em 0;
+  border-bottom: 0.45em solid transparent;
   color: #fff;
   font-weight: 700;
   font-size: 0.875em;
@@ -185,13 +202,17 @@ input[type='range'] {
   overflow-wrap: break-word;
   hyphens: auto;
 }
-/* Tile without an image: tinted, title centred and larger. */
-.item.noimg figure {
+/* Tile without an image: tinted, title centred and larger.
+   White on #1f3347 is 12.9:1. */
+.item.noimg figure::before {
+  content: '';
+  display: block;
   aspect-ratio: 4 / 3;
   background: #1f3347;
 }
 .item.noimg figcaption {
-  top: 0;
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -199,7 +220,63 @@ input[type='range'] {
   background: none;
   font-size: 1.05em;
   padding: 0.75em;
+  border-bottom: 0;
+  height: auto;
 }
+
+/* --- Title styles. [data-title] sits on #content. ---------------- */
+
+/* (c) Today: bar over the image, white on 75% black. Over a pure white
+   image that composites to #404040, 10.4:1. */
+[data-title='bar'] .item figcaption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.75);
+}
+
+/* (a) Scrim: the title sits over the image on a gradient that is clear
+   at the top and 82% black where the text is. Over a pure white image
+   the text zone composites to #2e2e2e, 13.6:1. */
+[data-title='scrim'] .item figcaption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding-top: 3.25em;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0.82) 3em, rgba(0, 0, 0, 0.82) 100%);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+/* (b) Card: rounded tile, small gutter, title below the image on a
+   dark label. #f2f2f2 on #1c1c1c is 15.2:1. */
+/* The gutter and radius apply to the proposed rows; today's Masonry and
+   CSS columns have no gutter to give, so there the card is only the label. */
+.layout-rows[data-title='card'] {
+  --gap: 8px;
+  --radius: 8px;
+  padding: var(--gap);
+}
+[data-title='card'] .item {
+  background: #1c1c1c;
+}
+[data-title='card'] .item figcaption {
+  position: static;
+  color: #f2f2f2;
+  height: calc(2 * 1.25em + 0.9em); /* two lines, fixed so rows stay level */
+}
+[data-title='card'] .item.noimg figcaption {
+  position: static;
+  display: -webkit-box;
+  text-align: left;
+  font-size: 0.875em;
+  padding: 0.45em 0.6em 0;
+  border-bottom: 0.45em solid transparent;
+  height: calc(2 * 1.25em + 0.9em);
+}
+
+/* --- Layouts. ------------------------------------------------------- */
 
 /* Current JS layout: Masonry positions the tiles, columns as today. */
 .layout-masonry .item {
@@ -217,37 +294,44 @@ input[type='range'] {
   vertical-align: top;
 }
 
-/* Proposed: balanced justified rows. justified.js sets every tile box;
-   the image fills it and crops only when its ratio was clamped. */
-.layout-justified .item {
-  position: absolute;
-}
-.layout-justified .item img,
-.layout-flex .item img {
-  height: 100%;
-  object-fit: cover;
-}
-.layout-justified .item.noimg figure {
-  aspect-ratio: auto;
-}
-
-/* Proposed no-JS fallback: flex rows, each tile grows by its ratio so a
-   row shares one height. The last row stays at natural height, left
-   aligned, instead of being stretched and cropped. */
-.layout-flex {
+/* Proposed, no script needed: flex rows. Each tile grows by its clamped
+   ratio, so a row shares one image height and is exactly full width;
+   the last row stays at natural height, left aligned, instead of being
+   stretched. The image box takes the clamped ratio and crops to it. */
+.layout-rows {
   display: flex;
   flex-wrap: wrap;
+  gap: var(--gap);
   --row-h: calc(75cqw / var(--cols)); /* same tile size as the columns */
 }
-.layout-flex::after {
+.layout-rows::after {
   content: '';
   flex: 1000000 1 0px;
 }
-.layout-flex .item {
+.layout-rows.is-justified::after {
+  content: none; /* every row is full, a filler would only add a row gap */
+}
+.layout-rows .item {
   --rc: clamp(var(--rmin), var(--r), var(--rmax));
   flex: var(--rc) 1 calc(var(--rc) * var(--row-h));
+}
+.layout-rows .item img {
+  aspect-ratio: var(--rc);
+  object-fit: cover;
+}
+.layout-rows .item.noimg figure::before {
   aspect-ratio: var(--rc);
 }
-.layout-flex .item.noimg figure {
+
+/* Same markup, upgraded by justified.js: every tile gets a whole-pixel
+   width and image height, so every row, the last one included, is full
+   width. Nothing else changes; without the script the rules above hold. */
+.layout-rows.is-justified .item {
+  flex: none;
+  width: var(--w);
+}
+.layout-rows.is-justified .item img,
+.layout-rows.is-justified .item.noimg figure::before {
   aspect-ratio: auto;
+  height: var(--h);
 }

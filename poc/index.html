@@ -14,9 +14,16 @@
 <body>
 <header>
   <h1>mwoffliner welcome page layouts</h1>
-  <p>100 test tiles for <a href="https://github.com/openzim/mwoffliner/issues/2694">issue #2694</a>, ratios from 1:5 to 5:1. Each image shows its number, its ratio and a dashed frame, so any crop is visible. Black is the page background: black area is uncovered. <a href="nojs.html">No-JS page</a>, <a href="images.json">images.json</a>, <a href="README.md">README</a>.</p>
+  <p>100 test tiles for <a href="https://github.com/openzim/mwoffliner/issues/2694">issue #2694</a>, ratios from 1:5 to 5:1. Each image shows its number, its ratio and a dashed frame, so any crop is visible. Black is the page background: black area is uncovered. The tiles are static in this page, so with scripts off it shows the flex rows as a no-JS reader sees them. <a href="nojs.html">Bare no-JS page</a>, <a href="images.json">images.json</a>, <a href="README.md">README</a>.</p>
+  <noscript><style>.controls, #metrics { display: none; }</style><p>Scripts are off, so this is the proposed layout as a reader without JavaScript gets it: CSS flex rows with the scrim title. With scripts on, the same tiles become justified rows and the controls below appear.</p></noscript>
   <div class="controls">
     <fieldset class="seg" id="layouts"><legend>Layout</legend></fieldset>
+    <fieldset class="seg">
+      <legend>Title</legend>
+      <input type="radio" name="title" id="t-scrim" value="scrim"><label for="t-scrim">Scrim</label>
+      <input type="radio" name="title" id="t-card" value="card"><label for="t-card">Card</label>
+      <input type="radio" name="title" id="t-bar" value="bar"><label for="t-bar">Bar (today)</label>
+    </fieldset>
     <fieldset class="seg">
       <legend>Width</legend>
       <input type="radio" name="width" id="w-320" value="320"><label for="w-320">320</label>
@@ -40,6 +47,109 @@
   </div>
   <p id="metrics" aria-live="polite"></p>
 </header>
-<div class="stage"><div class="frame"><div id="content"></div></div></div>
+<div class="stage"><div class="frame"><div id="content" class="layout-rows" data-title="scrim">
+<!-- tiles -->
+<a class="item" href="#tile-1" data-ratio="0.2000" style="--r:0.2000"><figure><img loading="lazy" src="images/001.svg" width="120" height="600" alt=""><figcaption>Haiti</figcaption></figure></a>
+<a class="item" href="#tile-2" data-ratio="0.6667" style="--r:0.6667"><figure><img loading="lazy" src="images/002.svg" width="400" height="600" alt=""><figcaption>Port-au-Prince</figcaption></figure></a>
+<a class="item" href="#tile-3" data-ratio="1.0000" style="--r:1.0000"><figure><img loading="lazy" src="images/003.svg" width="600" height="600" alt=""><figcaption>Mount Everest</figcaption></figure></a>
+<a class="item" href="#tile-4" data-ratio="1.3333" style="--r:1.3333"><figure><img loading="lazy" src="images/004.svg" width="600" height="450" alt=""><figcaption>Photosynthesis</figcaption></figure></a>
+<a class="item" href="#tile-5" data-ratio="1.0000" style="--r:1.0000"><figure><img loading="lazy" src="images/005.svg" width="600" height="600" alt=""><figcaption>Amazon River</figcaption></figure></a>
+<a class="item" href="#tile-6" data-ratio="1.3333" style="--r:1.3333"><figure><img loading="lazy" src="images/006.svg" width="600" height="450" alt=""><figcaption>List of tallest buildings and structures in the world</figcaption></figure></a>
+<a class="item" href="#tile-7" data-ratio="1.3333" style="--r:1.3333"><figure><img loading="lazy" src="images/007.svg" width="600" height="450" alt=""><figcaption>Jazz</figcaption></figure></a>
+<a class="item" href="#tile-8" data-ratio="0.5000" style="--r:0.5000"><figure><img loading="lazy" src="images/008.svg" width="300" height="600" alt=""><figcaption>Saturn</figcaption></figure></a>
+<a class="item" href="#tile-9" data-ratio="0.5000" style="--r:0.5000"><figure><img loading="lazy" src="images/009.svg" width="300" height="600" alt=""><figcaption>Hydroelectricity</figcaption></figure></a>
+<a class="item" href="#tile-10" data-ratio="2.0000" style="--r:2.0000"><figure><img loading="lazy" src="images/010.svg" width="600" height="300" alt=""><figcaption>Leonardo da Vinci</figcaption></figure></a>
+<a class="item" href="#tile-11" data-ratio="1.0000" style="--r:1.0000"><figure><img loading="lazy" src="images/011.svg" width="600" height="600" alt=""><figcaption>Great Barrier Reef</figcaption></figure></a>
+<a class="item" href="#tile-12" data-ratio="0.3333" style="--r:0.3333"><figure><img loading="lazy" src="images/012.svg" width="200" height="600" alt=""><figcaption>Tea</figcaption></figure></a>
+<a class="item" href="#tile-13" data-ratio="0.2000" style="--r:0.2000"><figure><img loading="lazy" src="images/013.svg" width="120" height="600" alt=""><figcaption>International Space Station</figcaption></figure></a>
+<a class="item" href="#tile-14" data-ratio="3.0000" style="--r:3.0000"><figure><img loading="lazy" src="images/014.svg" width="600" height="200" alt=""><figcaption>Eiffel Tower</figcaption></figure></a>
+<a class="item" href="#tile-15" data-ratio="0.3333" style="--r:0.3333"><figure><img loading="lazy" src="images/015.svg" width="200" height="600" alt=""><figcaption>Coral reef</figcaption></figure></a>
+<a class="item" href="#tile-16" data-ratio="1.7751" style="--r:1.7751"><figure><img loading="lazy" src="images/016.svg" width="600" height="338" alt=""><figcaption>Volcano</figcaption></figure></a>
+<a class="item" href="#tile-17" data-ratio="1.0000" style="--r:1.0000"><figure><img loading="lazy" src="images/017.svg" width="600" height="600" alt=""><figcaption>History of the Kingdom of Hawaii during the nineteenth century</figcaption></figure></a>
+<a class="item" href="#tile-18" data-ratio="3.0000" style="--r:3.0000"><figure><img loading="lazy" src="images/018.svg" width="600" height="200" alt=""><figcaption>Baobab</figcaption></figure></a>
+<a class="item" href="#tile-19" data-ratio="1.3333" style="--r:1.3333"><figure><img loading="lazy" src="images/019.svg" width="600" height="450" alt=""><figcaption>Sahara</figcaption></figure></a>
+<a class="item" href="#tile-20" data-ratio="1.3333" style="--r:1.3333"><figure><img loading="lazy" src="images/020.svg" width="600" height="450" alt=""><figcaption>Printing press</figcaption></figure></a>
+<a class="item" href="#tile-21" data-ratio="0.3333" style="--r:0.3333"><figure><img loading="lazy" src="images/021.svg" width="200" height="600" alt=""><figcaption>Honey bee</figcaption></figure></a>
+<a class="item" href="#tile-22" data-ratio="0.3333" style="--r:0.3333"><figure><img loading="lazy" src="images/022.svg" width="200" height="600" alt=""><figcaption>Antarctica</figcaption></figure></a>
+<a class="item" href="#tile-23" data-ratio="1.0000" style="--r:1.0000"><figure><img loading="lazy" src="images/023.svg" width="600" height="600" alt=""><figcaption>Banana</figcaption></figure></a>
+<a class="item" href="#tile-24" data-ratio="0.5000" style="--r:0.5000"><figure><img loading="lazy" src="images/024.svg" width="300" height="600" alt=""><figcaption>Lighthouse</figcaption></figure></a>
+<a class="item" href="#tile-25" data-ratio="0.7500" style="--r:0.7500"><figure><img loading="lazy" src="images/025.svg" width="450" height="600" alt=""><figcaption>Citadelle Laferrière</figcaption></figure></a>
+<a class="item" href="#tile-26" data-ratio="2.0000" style="--r:2.0000"><figure><img loading="lazy" src="images/026.svg" width="600" height="300" alt=""><figcaption>Machu Picchu</figcaption></figure></a>
+<a class="item" href="#tile-27" data-ratio="1.3333" style="--r:1.3333"><figure><img loading="lazy" src="images/027.svg" width="600" height="450" alt=""><figcaption>Blue whale</figcaption></figure></a>
+<a class="item" href="#tile-28" data-ratio="0.7500" style="--r:0.7500"><figure><img loading="lazy" src="images/028.svg" width="450" height="600" alt=""><figcaption>Rainbow</figcaption></figure></a>
+<a class="item" href="#tile-29" data-ratio="0.7500" style="--r:0.7500"><figure><img loading="lazy" src="images/029.svg" width="450" height="600" alt=""><figcaption>Pyramid</figcaption></figure></a>
+<a class="item" href="#tile-30" data-ratio="0.7500" style="--r:0.7500"><figure><img loading="lazy" src="images/030.svg" width="450" height="600" alt=""><figcaption>United Nations Educational, Scientific and Cultural Organization</figcaption></figure></a>
+<a class="item" href="#tile-31" data-ratio="1.3333" style="--r:1.3333"><figure><img loading="lazy" src="images/031.svg" width="600" height="450" alt=""><figcaption>Moon</figcaption></figure></a>
+<a class="item" href="#tile-32" data-ratio="1.3333" style="--r:1.3333"><figure><img loading="lazy" src="images/032.svg" width="600" height="450" alt=""><figcaption>Bicycle</figcaption></figure></a>
+<a class="item" href="#tile-33" data-ratio="0.6667" style="--r:0.6667"><figure><img loading="lazy" src="images/033.svg" width="400" height="600" alt=""><figcaption>Tornado</figcaption></figure></a>
+<a class="item" href="#tile-34" data-ratio="1.7751" style="--r:1.7751"><figure><img loading="lazy" src="images/034.svg" width="600" height="338" alt=""><figcaption>Penguin</figcaption></figure></a>
+<a class="item" href="#tile-35" data-ratio="0.3333" style="--r:0.3333"><figure><img loading="lazy" src="images/035.svg" width="200" height="600" alt=""><figcaption>Chess</figcaption></figure></a>
+<a class="item" href="#tile-36" data-ratio="0.7500" style="--r:0.7500"><figure><img loading="lazy" src="images/036.svg" width="450" height="600" alt=""><figcaption>Rice</figcaption></figure></a>
+<a class="item" href="#tile-37" data-ratio="1.3333" style="--r:1.3333"><figure><img loading="lazy" src="images/037.svg" width="600" height="450" alt=""><figcaption>Mangrove</figcaption></figure></a>
+<a class="item" href="#tile-38" data-ratio="0.7500" style="--r:0.7500"><figure><img loading="lazy" src="images/038.svg" width="450" height="600" alt=""><figcaption>Aurora</figcaption></figure></a>
+<a class="item" href="#tile-39" data-ratio="2.0000" style="--r:2.0000"><figure><img loading="lazy" src="images/039.svg" width="600" height="300" alt=""><figcaption>Steam engine</figcaption></figure></a>
+<a class="item" href="#tile-40" data-ratio="1.0000" style="--r:1.0000"><figure><img loading="lazy" src="images/040.svg" width="600" height="600" alt=""><figcaption>Coffee</figcaption></figure></a>
+<a class="item" href="#tile-41" data-ratio="3.0000" style="--r:3.0000"><figure><img loading="lazy" src="images/041.svg" width="600" height="200" alt=""><figcaption>Giraffe</figcaption></figure></a>
+<a class="item" href="#tile-42" data-ratio="3.0000" style="--r:3.0000"><figure><img loading="lazy" src="images/042.svg" width="600" height="200" alt=""><figcaption>Wind power</figcaption></figure></a>
+<a class="item" href="#tile-43" data-ratio="5.0000" style="--r:5.0000"><figure><img loading="lazy" src="images/043.svg" width="600" height="120" alt=""><figcaption>Glacier</figcaption></figure></a>
+<a class="item" href="#tile-44" data-ratio="0.7500" style="--r:0.7500"><figure><img loading="lazy" src="images/044.svg" width="450" height="600" alt=""><figcaption>Octopus</figcaption></figure></a>
+<a class="item" href="#tile-45" data-ratio="1.5000" style="--r:1.5000"><figure><img loading="lazy" src="images/045.svg" width="600" height="400" alt=""><figcaption>Timeline of the far future</figcaption></figure></a>
+<a class="item" href="#tile-46" data-ratio="0.7500" style="--r:0.7500"><figure><img loading="lazy" src="images/046.svg" width="450" height="600" alt=""><figcaption>Violin</figcaption></figure></a>
+<a class="item" href="#tile-47" data-ratio="1.3333" style="--r:1.3333"><figure><img loading="lazy" src="images/047.svg" width="600" height="450" alt=""><figcaption>Cathedral of Our Lady of the Assumption</figcaption></figure></a>
+<a class="item" href="#tile-48" data-ratio="0.6667" style="--r:0.6667"><figure><img loading="lazy" src="images/048.svg" width="400" height="600" alt=""><figcaption>Dinosaur</figcaption></figure></a>
+<a class="item" href="#tile-49" data-ratio="1.3333" style="--r:1.3333"><figure><img loading="lazy" src="images/049.svg" width="600" height="450" alt=""><figcaption>Silk Road</figcaption></figure></a>
+<a class="item" href="#tile-50" data-ratio="0.3333" style="--r:0.3333"><figure><img loading="lazy" src="images/050.svg" width="200" height="600" alt=""><figcaption>Hummingbird</figcaption></figure></a>
+<a class="item" href="#tile-51" data-ratio="1.0000" style="--r:1.0000"><figure><img loading="lazy" src="images/051.svg" width="600" height="600" alt=""><figcaption>Water cycle</figcaption></figure></a>
+<a class="item" href="#tile-52" data-ratio="0.7500" style="--r:0.7500"><figure><img loading="lazy" src="images/052.svg" width="450" height="600" alt=""><figcaption>Kite</figcaption></figure></a>
+<a class="item" href="#tile-53" data-ratio="1.0000" style="--r:1.0000"><figure><img loading="lazy" src="images/053.svg" width="600" height="600" alt=""><figcaption>Lion</figcaption></figure></a>
+<a class="item" href="#tile-54" data-ratio="0.3333" style="--r:0.3333"><figure><img loading="lazy" src="images/054.svg" width="200" height="600" alt=""><figcaption>Great Wall of China</figcaption></figure></a>
+<a class="item" href="#tile-55" data-ratio="1.7751" style="--r:1.7751"><figure><img loading="lazy" src="images/055.svg" width="600" height="338" alt=""><figcaption>Telescope</figcaption></figure></a>
+<a class="item" href="#tile-56" data-ratio="1.5000" style="--r:1.5000"><figure><img loading="lazy" src="images/056.svg" width="600" height="400" alt=""><figcaption>Mango</figcaption></figure></a>
+<a class="item" href="#tile-57" data-ratio="1.3333" style="--r:1.3333"><figure><img loading="lazy" src="images/057.svg" width="600" height="450" alt=""><figcaption>Sea turtle</figcaption></figure></a>
+<a class="item" href="#tile-58" data-ratio="0.3333" style="--r:0.3333"><figure><img loading="lazy" src="images/058.svg" width="200" height="600" alt=""><figcaption>Hurricane Matthew</figcaption></figure></a>
+<a class="item" href="#tile-59" data-ratio="0.7500" style="--r:0.7500"><figure><img loading="lazy" src="images/059.svg" width="450" height="600" alt=""><figcaption>Pacific Ocean</figcaption></figure></a>
+<a class="item" href="#tile-60" data-ratio="3.0000" style="--r:3.0000"><figure><img loading="lazy" src="images/060.svg" width="600" height="200" alt=""><figcaption>Cocoa bean</figcaption></figure></a>
+<a class="item" href="#tile-61" data-ratio="0.6667" style="--r:0.6667"><figure><img loading="lazy" src="images/061.svg" width="400" height="600" alt=""><figcaption>Bamboo</figcaption></figure></a>
+<a class="item" href="#tile-62" data-ratio="0.7500" style="--r:0.7500"><figure><img loading="lazy" src="images/062.svg" width="450" height="600" alt=""><figcaption>Archimedes</figcaption></figure></a>
+<a class="item" href="#tile-63" data-ratio="0.5000" style="--r:0.5000"><figure><img loading="lazy" src="images/063.svg" width="300" height="600" alt=""><figcaption>Flamenco</figcaption></figure></a>
+<a class="item" href="#tile-64" data-ratio="1.0000" style="--r:1.0000"><figure><img loading="lazy" src="images/064.svg" width="600" height="600" alt=""><figcaption>Tsunami</figcaption></figure></a>
+<a class="item" href="#tile-65" data-ratio="0.3333" style="--r:0.3333"><figure><img loading="lazy" src="images/065.svg" width="200" height="600" alt=""><figcaption>Sugarcane</figcaption></figure></a>
+<a class="item" href="#tile-66" data-ratio="0.6667" style="--r:0.6667"><figure><img loading="lazy" src="images/066.svg" width="400" height="600" alt=""><figcaption>Rosetta Stone</figcaption></figure></a>
+<a class="item" href="#tile-67" data-ratio="1.0000" style="--r:1.0000"><figure><img loading="lazy" src="images/067.svg" width="600" height="600" alt=""><figcaption>Elephant</figcaption></figure></a>
+<a class="item" href="#tile-68" data-ratio="2.0000" style="--r:2.0000"><figure><img loading="lazy" src="images/068.svg" width="600" height="300" alt=""><figcaption>Cactus</figcaption></figure></a>
+<a class="item" href="#tile-69" data-ratio="1.5000" style="--r:1.5000"><figure><img loading="lazy" src="images/069.svg" width="600" height="400" alt=""><figcaption>Solar eclipse</figcaption></figure></a>
+<a class="item" href="#tile-70" data-ratio="1.0000" style="--r:1.0000"><figure><img loading="lazy" src="images/070.svg" width="600" height="600" alt=""><figcaption>Kayak</figcaption></figure></a>
+<a class="item" href="#tile-71" data-ratio="1.3333" style="--r:1.3333"><figure><img loading="lazy" src="images/071.svg" width="600" height="450" alt=""><figcaption>List of World Heritage Sites in Latin America and the Caribbean</figcaption></figure></a>
+<a class="item" href="#tile-72" data-ratio="1.3333" style="--r:1.3333"><figure><img loading="lazy" src="images/072.svg" width="600" height="450" alt=""><figcaption>Owl</figcaption></figure></a>
+<a class="item" href="#tile-73" data-ratio="0.7500" style="--r:0.7500"><figure><img loading="lazy" src="images/073.svg" width="450" height="600" alt=""><figcaption>Carnival</figcaption></figure></a>
+<a class="item" href="#tile-74" data-ratio="5.0000" style="--r:5.0000"><figure><img loading="lazy" src="images/074.svg" width="600" height="120" alt=""><figcaption>Waterfall</figcaption></figure></a>
+<a class="item" href="#tile-75" data-ratio="0.3333" style="--r:0.3333"><figure><img loading="lazy" src="images/075.svg" width="200" height="600" alt=""><figcaption>Mars</figcaption></figure></a>
+<a class="item" href="#tile-76" data-ratio="0.7500" style="--r:0.7500"><figure><img loading="lazy" src="images/076.svg" width="450" height="600" alt=""><figcaption>Orchid</figcaption></figure></a>
+<a class="item" href="#tile-77" data-ratio="1.3333" style="--r:1.3333"><figure><img loading="lazy" src="images/077.svg" width="600" height="450" alt=""><figcaption>Vaccine</figcaption></figure></a>
+<a class="item" href="#tile-78" data-ratio="3.0000" style="--r:3.0000"><figure><img loading="lazy" src="images/078.svg" width="600" height="200" alt=""><figcaption>Lake Titicaca</figcaption></figure></a>
+<a class="item" href="#tile-79" data-ratio="1.3333" style="--r:1.3333"><figure><img loading="lazy" src="images/079.svg" width="600" height="450" alt=""><figcaption>Drum</figcaption></figure></a>
+<a class="item" href="#tile-80" data-ratio="1.7751" style="--r:1.7751"><figure><img loading="lazy" src="images/080.svg" width="600" height="338" alt=""><figcaption>Jellyfish</figcaption></figure></a>
+<a class="item" href="#tile-81" data-ratio="1.5000" style="--r:1.5000"><figure><img loading="lazy" src="images/081.svg" width="600" height="400" alt=""><figcaption>Pineapple</figcaption></figure></a>
+<a class="item" href="#tile-82" data-ratio="0.7500" style="--r:0.7500"><figure><img loading="lazy" src="images/082.svg" width="450" height="600" alt=""><figcaption>Taj Mahal</figcaption></figure></a>
+<a class="item" href="#tile-83" data-ratio="1.3333" style="--r:1.3333"><figure><img loading="lazy" src="images/083.svg" width="600" height="450" alt=""><figcaption>Desert</figcaption></figure></a>
+<a class="item" href="#tile-84" data-ratio="1.0000" style="--r:1.0000"><figure><img loading="lazy" src="images/084.svg" width="600" height="600" alt=""><figcaption>Fern</figcaption></figure></a>
+<a class="item" href="#tile-85" data-ratio="1.5000" style="--r:1.5000"><figure><img loading="lazy" src="images/085.svg" width="600" height="400" alt=""><figcaption>Radio</figcaption></figure></a>
+<a class="item" href="#tile-86" data-ratio="0.7500" style="--r:0.7500"><figure><img loading="lazy" src="images/086.svg" width="450" height="600" alt=""><figcaption>Shark</figcaption></figure></a>
+<a class="item" href="#tile-87" data-ratio="0.7500" style="--r:0.7500"><figure><img loading="lazy" src="images/087.svg" width="450" height="600" alt=""><figcaption>Pierre-Dominique Toussaint Louverture</figcaption></figure></a>
+<a class="item" href="#tile-88" data-ratio="1.0000" style="--r:1.0000"><figure><img loading="lazy" src="images/088.svg" width="600" height="600" alt=""><figcaption>Avocado</figcaption></figure></a>
+<a class="item" href="#tile-89" data-ratio="0.7500" style="--r:0.7500"><figure><img loading="lazy" src="images/089.svg" width="450" height="600" alt=""><figcaption>Earthquake</figcaption></figure></a>
+<a class="item" href="#tile-90" data-ratio="1.0000" style="--r:1.0000"><figure><img loading="lazy" src="images/090.svg" width="600" height="600" alt=""><figcaption>Llama</figcaption></figure></a>
+<a class="item" href="#tile-91" data-ratio="3.0000" style="--r:3.0000"><figure><img loading="lazy" src="images/091.svg" width="600" height="200" alt=""><figcaption>Milky Way</figcaption></figure></a>
+<a class="item" href="#tile-92" data-ratio="0.2000" style="--r:0.2000"><figure><img loading="lazy" src="images/092.svg" width="120" height="600" alt=""><figcaption>Sunflower</figcaption></figure></a>
+<a class="item" href="#tile-93" data-ratio="0.7500" style="--r:0.7500"><figure><img loading="lazy" src="images/093.svg" width="450" height="600" alt=""><figcaption>Rain forest</figcaption></figure></a>
+<a class="item" href="#tile-94" data-ratio="3.0000" style="--r:3.0000"><figure><img loading="lazy" src="images/094.svg" width="600" height="200" alt=""><figcaption>Lemur</figcaption></figure></a>
+<a class="item" href="#tile-95" data-ratio="3.0000" style="--r:3.0000"><figure><img loading="lazy" src="images/095.svg" width="600" height="200" alt=""><figcaption>Compass</figcaption></figure></a>
+<a class="item" href="#tile-96" data-ratio="3.0000" style="--r:3.0000"><figure><img loading="lazy" src="images/096.svg" width="600" height="200" alt=""><figcaption>Peacock</figcaption></figure></a>
+<a class="item" href="#tile-97" data-ratio="0.3333" style="--r:0.3333"><figure><img loading="lazy" src="images/097.svg" width="200" height="600" alt=""><figcaption>Comparison of programming languages (basic instructions)</figcaption></figure></a>
+<a class="item" href="#tile-98" data-ratio="3.0000" style="--r:3.0000"><figure><img loading="lazy" src="images/098.svg" width="600" height="200" alt=""><figcaption>Iceberg</figcaption></figure></a>
+<a class="item" href="#tile-99" data-ratio="1.3333" style="--r:1.3333"><figure><img loading="lazy" src="images/099.svg" width="600" height="450" alt=""><figcaption>Fox</figcaption></figure></a>
+<a class="item" href="#tile-100" data-ratio="5.0000" style="--r:5.0000"><figure><img loading="lazy" src="images/100.svg" width="600" height="120" alt=""><figcaption>Wright brothers</figcaption></figure></a>
+<!-- /tiles -->
+</div></div></div>
 </body>
 </html>

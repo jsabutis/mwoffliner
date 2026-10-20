@@ -1,6 +1,7 @@
-// PoC harness: builds the 100 tiles from images.json, runs the chosen
-// layout at the chosen width and reports what is uncovered or cropped.
-// Layouts register themselves in window.PocLayouts (see layouts/).
+// PoC harness: the 100 tiles are static in index.html (so the page works
+// with no script at all), this runs the chosen layout at the chosen width
+// and reports what is uncovered or cropped. Layouts register themselves
+// in window.PocLayouts (see layouts/).
 ;(function () {
   var CLAMPS = {
     2: [1 / 2, 2],
@@ -8,11 +9,13 @@
     5: [1 / 5, 5],
     off: [0.01, 100],
   }
+  var TITLES = ['scrim', 'card', 'bar']
   var params = new URLSearchParams(location.search)
   var state = {
     layout: params.get('layout') || 'justified',
+    title: TITLES.indexOf(params.get('title')) >= 0 ? params.get('title') : 'scrim',
     w: params.get('w') || 'fill',
-    clamp: params.get('clamp') || '3',
+    clamp: params.get('clamp') in CLAMPS ? params.get('clamp') : '2',
     missing: params.get('missing') === '1',
   }
   var manifest = []
@@ -23,6 +26,19 @@
 
   function esc(t) {
     return t.replace(/&/g, '&amp;').replace(/</g, '&lt;')
+  }
+
+  // The static tiles carry everything: file, size and title.
+  function readTiles() {
+    return Array.prototype.map.call(content.querySelectorAll('.item'), function (el) {
+      var img = el.querySelector('img')
+      return {
+        file: img.getAttribute('src'),
+        width: +img.getAttribute('width'),
+        height: +img.getAttribute('height'),
+        title: el.querySelector('figcaption').textContent,
+      }
+    })
   }
 
   // Same markup as makePageImageTile, plus the ratio for the layouts.
@@ -43,12 +59,13 @@
   function render() {
     if (active && active.reset) active.reset(content)
     active = window.PocLayouts.filter(function (l) { return l.id === state.layout })[0] || window.PocLayouts[0]
-    content.className = 'layout-' + active.id
+    content.className = active.css
+    content.setAttribute('data-title', state.title)
     content.removeAttribute('style')
     Array.prototype.forEach.call(content.children, function (el) {
       el.style.cssText = '--r:' + el.getAttribute('data-ratio')
     })
-    var clamp = CLAMPS[state.clamp] || CLAMPS[3]
+    var clamp = CLAMPS[state.clamp] || CLAMPS[2]
     frame.style.setProperty('--rmin', clamp[0])
     frame.style.setProperty('--rmax', clamp[1])
     lastWidth = content.clientWidth
@@ -66,15 +83,26 @@
   }
 
   // Geometry check, shared by every layout. Also used by the Playwright run.
+  // Gutters chosen by the title style (card) are not counted as uncovered.
   function metrics() {
-    var c = content.getBoundingClientRect()
+    var cs = getComputedStyle(content)
+    var rect = content.getBoundingClientRect()
+    var c = {
+      left: rect.left + parseFloat(cs.paddingLeft),
+      right: rect.right - parseFloat(cs.paddingRight),
+      top: rect.top + parseFloat(cs.paddingTop),
+      bottom: rect.bottom - parseFloat(cs.paddingBottom),
+    }
+    c.width = c.right - c.left
+    c.height = c.bottom - c.top
+    var gap = parseFloat(cs.columnGap) || 0
     var covered = 0
     var overflow = 0
     var cropped = 0
     var worst = { visible: 1, tile: null }
     var minH = Infinity
     var maxH = 0
-    var tops = {}
+    var rows = {}
     Array.prototype.forEach.call(content.children, function (el, i) {
       var r = el.getBoundingClientRect()
       var w = Math.max(0, Math.min(r.right, c.right) - Math.max(r.left, c.left))
@@ -83,20 +111,30 @@
       if (r.right > c.right + 0.5 || r.left < c.left - 0.5) overflow++
       minH = Math.min(minH, r.height)
       maxH = Math.max(maxH, r.height)
-      tops[Math.round(r.top - c.top)] = 1
+      var key = Math.round(r.top - c.top)
+      rows[key] = rows[key] || { n: 0, h: 0 }
+      rows[key].n++
+      rows[key].h = Math.max(rows[key].h, r.height)
       var img = el.querySelector('img')
       if (img && getComputedStyle(img).objectFit === 'cover') {
         var natural = manifest[i].width / manifest[i].height
         var box = img.clientWidth / img.clientHeight
         var visible = Math.min(natural, box) / Math.max(natural, box)
         if (visible < 0.98) cropped++
-        if (visible < worst.visible) worst = { visible: visible, tile: i + 1, ratio: manifest[i].ratio }
+        if (visible < worst.visible) worst = { visible: visible, tile: i + 1, ratio: ratioLabel(manifest[i]) }
       }
     })
+    var rowList = Object.keys(rows).map(function (k) { return rows[k] })
+    var gutters = 0
+    if (gap && !cs.columnCount.match(/^\d/)) {
+      rowList.forEach(function (row) { gutters += (row.n - 1) * gap * row.h })
+      gutters += (rowList.length - 1) * gap * c.width
+    }
+    var area = c.width * c.height
     return {
       width: Math.round(c.width),
       height: Math.round(c.height),
-      uncoveredPct: c.width * c.height ? +(100 - (100 * covered) / (c.width * c.height)).toFixed(2) : 0,
+      uncoveredPct: area ? Math.max(0, +(100 - (100 * (covered + gutters)) / area).toFixed(2)) : 0,
       overflowTiles: overflow,
       pageOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
       croppedTiles: cropped,
@@ -104,8 +142,15 @@
       worstTile: worst.tile,
       worstRatio: worst.ratio || null,
       tileHeights: [Math.round(minH), Math.round(maxH)],
-      rows: Object.keys(tops).length,
+      rows: rowList.length,
     }
+  }
+
+  function ratioLabel(m) {
+    var r = m.width / m.height
+    var known = { 0.2: '1:5', 0.3333: '1:3', 0.5: '1:2', 0.5625: '9:16', 0.6667: '2:3', 0.75: '3:4', 1: '1:1', 1.3333: '4:3', 1.5: '3:2', 1.7778: '16:9', 2: '2:1', 3: '3:1', 5: '5:1' }
+    var key = Object.keys(known).filter(function (k) { return Math.abs(k - r) < 0.01 })[0]
+    return key ? known[key] : r.toFixed(2)
   }
 
   function showMetrics() {
@@ -130,6 +175,7 @@
   function saveState() {
     var q = new URLSearchParams()
     q.set('layout', state.layout)
+    q.set('title', state.title)
     q.set('w', state.w)
     q.set('clamp', state.clamp)
     if (state.missing) q.set('missing', '1')
@@ -150,6 +196,8 @@
   function syncControls() {
     var radio = document.querySelector('input[name="layout"][value="' + state.layout + '"]')
     if (radio) radio.checked = true
+    var tr = document.querySelector('input[name="title"][value="' + state.title + '"]')
+    if (tr) tr.checked = true
     var wr = document.querySelector('input[name="width"][value="' + state.w + '"]')
     Array.prototype.forEach.call(document.querySelectorAll('input[name="width"]'), function (el) { el.checked = el === wr })
     document.getElementById('clamp').value = state.clamp
@@ -166,6 +214,7 @@
     document.addEventListener('change', function (e) {
       var t = e.target
       if (t.name === 'layout') set({ layout: t.value })
+      if (t.name === 'title') set({ title: t.value })
       if (t.name === 'width') set({ w: t.value })
       if (t.id === 'clamp') set({ clamp: t.value })
       if (t.id === 'missing') set({ missing: t.checked })
@@ -183,15 +232,11 @@
     pending = requestAnimationFrame(render)
   }).observe(frame)
 
-  fetch('images.json')
-    .then(function (r) { return r.json() })
-    .then(function (data) {
-      manifest = data
-      buildControls()
-      buildTiles()
-      set({})
-      window.pocSet = set
-      window.pocMetrics = metrics
-      document.documentElement.setAttribute('data-ready', '1')
-    })
+  manifest = readTiles()
+  buildControls()
+  if (state.missing) buildTiles()
+  set({})
+  window.pocSet = set
+  window.pocMetrics = metrics
+  document.documentElement.setAttribute('data-ready', '1')
 })()
